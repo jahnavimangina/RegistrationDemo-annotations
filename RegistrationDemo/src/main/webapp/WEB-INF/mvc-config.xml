@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+
+<!-- 	<context:component-scan base-package="com.examples.web" />
+
+	<mvc:annotation-driven /> -->
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- Example: a logical view name of 'showMessage' is mapped to '/WEB-INF/jsp/showMessage.jsp' -->
+		<property name="prefix" value="/WEB-INF/view/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource"
+		p:basename="messages">
+	</bean>
+	<mvc:interceptors>
+		<bean class="com.examples.web.interceptors.PerformanceInterceptor"></bean>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
+			p:paramName="language">
+		</bean>
+	</mvc:interceptors>
+
+
+	<bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		p:driverClassName="oracle.jdbc.driver.OracleDriver" p:username="${oracle.db.user}"
+		p:password="${oracle.db.pwd}" p:url="${oracle.db.url}" />
+
+	<bean id="loadProperties"
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"
+		p:location="classpath:db.properties">
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+		c:dataSource-ref="basicDataSource"></bean>
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver"
+		p:defaultLocale="en">
+	</bean>
+
+<!-- 	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles/tiles-definitions.xml</value>
+			</list>
+		</property>
+	</bean> -->
+	
+	<!-- 	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer" p:definitions-ref="tilesDefinitionsList">
+	</bean>
+	
+	<util:list id="tilesDefinitionsList" value-type="java.lang.String"
+		list-class="java.util.ArrayList">
+	<value>/WEB-INF/tiles/tiles-definitions.xml</value>
+	</util:list> -->
+	
+<!-- 	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"
+	 p:viewClass="org.springframework.web.servlet.view.tiles3.TilesView">	
+	</bean> -->
+</beans>
